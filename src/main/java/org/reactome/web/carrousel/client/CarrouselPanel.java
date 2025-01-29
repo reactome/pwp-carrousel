@@ -18,7 +18,7 @@ import java.util.List;
  * This class implements the Carousel widget, providing an
  * easy way to show a series of images with accompanying text.
  *
- * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
+ * @author Kostas Sidiropoulos (ksidiro@ebi.ac.uk)
  */
 public class CarrouselPanel extends FlowPanel {
 

@@ -3,14 +3,12 @@
         xmlns="http://maven.apache.org/POM/4.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>org.reactome.web</groupId>
     <artifactId>carrousel</artifactId>
+    <version>1.1.7-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <version>1.1.6</version>
-
-    <name>Carrousel</name>
 
     <parent>
         <groupId>org.reactome.maven</groupId>
@@ -18,29 +16,50 @@
         <version>1.0.3</version>
     </parent>
 
+    <name>Carrousel</name>
     <description>
         Images carrousel used for documentation in the Reactome widgets ecosystem
     </description>
+    <url>https://github.com/reactome/pwp-carrousel</url>
 
     <organization>
-        <name>The European Bioinformatics Institute</name>
-        <url>https://www.ebi.ac.uk/</url>
+        <name>Reactome</name>
+        <url>https://reactome.org</url>
     </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
     <developers>
         <developer>
             <id>ksidiro</id>
             <name>Kostas Sidiropoulos</name>
-            <email>ksidiro@ebi.ac.uk</email>
-            <organization>https://www.ebi.ac.uk/</organization>
+            <roles>
+                <role>alumni</role>
+            </roles>
+            <organization>The European Bioinformatics Institute</organization>
+            <organizationUrl>https://www.ebi.ac.uk/</organizationUrl>
         </developer>
         <developer>
             <id>fabregat</id>
             <name>Antonio Fabregat</name>
-            <email>fabregat@ebi.ac.uk</email>
-            <organization>https://www.ebi.ac.uk/</organization>
+            <roles>
+                <role>alumni</role>
+            </roles>
+            <organization>The European Bioinformatics Institute</organization>
+            <organizationUrl>https://www.ebi.ac.uk/</organizationUrl>
         </developer>
     </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/reactome/pwp-carrousel.git</connection>
+        <developerConnection>scm:git:ssh://github.com:reactome/pwp-carrousel.git</developerConnection>
+        <url>https://github.com/reactome/pwp-carrousel/tree/master</url>
+    </scm>
 
     <properties>
         <!-- Convenience property to set the GWT version -->
@@ -53,6 +72,10 @@
         <appModule>org.reactome.web.carrousel.Carrousel</appModule>
         <appName>${appModule}</appName>
 
+        <maven.release.version>3.3.1</maven.release.version>
+        <maven.gpg.version>3.2.7</maven.gpg.version>
+        <maven.javadoc.version>3.11.2</maven.javadoc.version>
+        <nexus-staging-maven-plugin>1.7.0</nexus-staging-maven-plugin>
     </properties>
 
     <profiles>
@@ -233,6 +256,63 @@
                 <version>${maven.deploy.version}</version>
             </plugin>
 
+            <!-- Nexus staging plugin for Sonatype deployment -->
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${nexus-staging-maven-plugin}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
+            <!-- Generate JavaDoc jar file -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Signs deployed jar, source jar, and JavaDoc jar with GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>${maven.gpg.version}</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Allows "release" mvn goal to deploy a SNAPSHOT or version release to Sonatype -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+
         </plugins>
 
         <!-- scp support for deployment (MVN 3) -->
@@ -286,4 +366,21 @@
             </snapshots>
         </repository>
     </repositories>
+
+    <!-- Configures the distribution to nexus repository -->
+    <distributionManagement>
+        <!-- Sonatype Release repo -->
+        <repository>
+            <id>ossrh</id>
+            <name>Sonatype Release Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+
+        <!-- Sonatype SNAPSHOT repo -->
+        <snapshotRepository>
+            <id>ossrh</id>
+            <name>Sonatype Snapshot Repository</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

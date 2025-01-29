@@ -298,6 +298,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <gpgExecutable>gpg</gpgExecutable> <!-- Explicitly specify the GPG executable -->
+                </configuration>
             </plugin>
 
             <!-- Allows "release" mvn goal to deploy a SNAPSHOT or version release to Sonatype -->

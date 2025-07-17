@@ -14,7 +14,7 @@ import com.google.gwt.user.client.ui.Widget;
  * This class holds the content of a single carousel slide
  * and its size is defined by the CarrouselPanel.
  *
- * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
+ * @author Kostas Sidiropoulos (ksidiro@ebi.ac.uk)
  */
 public class Slide extends AbsolutePanel {
     private ImageResource imageResource;

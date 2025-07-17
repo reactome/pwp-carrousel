@@ -16,7 +16,7 @@ import org.reactome.web.carrousel.client.buttons.CarrouselButton;
 import java.util.List;
 
 /**
- * @author Kostas Sidiropoulos <ksidiro@ebi.ac.uk>
+ * @author Kostas Sidiropoulos (ksidiro@ebi.ac.uk)
  */
 public class CarouselDialog extends PopupPanel {
     private CarrouselPanel carousel;
